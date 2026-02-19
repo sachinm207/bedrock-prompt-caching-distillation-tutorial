@@ -1,0 +1,50 @@
+{
+  "Nova Pro_baseline": {
+    "inp": 11710,
+    "out": 558,
+    "cr": 0,
+    "cw": 0,
+    "lat": 7.5,
+    "cost": 0.0111536
+  },
+  "Nova Pro_cached": {
+    "inp": 1368,
+    "out": 576,
+    "cr": 8276,
+    "cw": 2067,
+    "lat": 7.25,
+    "cost": 0.00457228
+  },
+  "Nova Lite_baseline": {
+    "inp": 12695,
+    "out": 1039,
+    "cr": 0,
+    "cw": 0,
+    "lat": 7.69,
+    "cost": 0.0010110599999999998
+  },
+  "Nova Lite_cached": {
+    "inp": 2583,
+    "out": 1060,
+    "cr": 8260,
+    "cw": 2065,
+    "lat": 8.09,
+    "cost": 0.000458835
+  },
+  "Nova Micro_baseline": {
+    "inp": 12440,
+    "out": 936,
+    "cr": 0,
+    "cw": 0,
+    "lat": 6.19,
+    "cost": 0.0005664400000000001
+  },
+  "Nova Micro_cached": {
+    "inp": 1990,
+    "out": 907,
+    "cr": 8260,
+    "cw": 2065,
+    "lat": 6.06,
+    "cost": 0.00025088
+  }
+}

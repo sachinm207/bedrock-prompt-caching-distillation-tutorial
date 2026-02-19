@@ -1,0 +1,183 @@
+SmartWidget Pro v4.2 — Product Docs
+
+OVERVIEW
+
+SmartWidget Pro is an API management and workflow automation platform for teams
+that need to build, deploy, and monitor API-driven workflows. Rate limiting,
+auth, analytics are all built in. We have about 12,000 enterprise customers
+across 45 countries right now, handling roughly 2.3B API calls/month.
+
+
+FEATURES
+
+API Gateway
+- REST, GraphQL, gRPC, WebSocket
+- Auto-generates OpenAPI 3.1 specs from your deployed endpoints
+- Request/response transformation with JSONPath expressions
+- Rate limiting can be set per-user, per-key, per-endpoint, or globally
+- Defaults: 1,000 req/min (Standard), 10,000 (Pro), 50,000 (Enterprise)
+- Max request size: 10MB / 50MB / 256MB depending on plan
+- SSL termination via Let's Encrypt or bring your own cert
+- IP allowlisting/blocklisting (CIDR notation)
+
+Workflow Engine
+- Drag-and-drop builder, 150+ connectors out of the box
+- Conditional branching, parallel paths (wait-all, wait-any, wait-n joins)
+- Retry on failure: exponential backoff, configurable 1-10 retries, 1s-5m base delay
+- Versioning with instant rollback
+- Max execution time varies by plan: 15min / 60min / 24hrs
+- Triggers: cron, fixed interval, or webhook
+- Transform data between steps with Jinja2 or JS expressions
+
+Auth & Security
+- OAuth 2.0, SAML 2.0, OpenID Connect
+- API key rotation on 30/60/90 day cycles
+- RBAC with custom roles
+- Audit logs kept 90 days (Standard), 1yr (Pro), 7yr (Enterprise)
+- SOC 2 Type II, ISO 27001, HIPAA, GDPR
+- AES-256 at rest, TLS 1.3 in transit
+- MFA required for admins
+- SSO via Okta, Azure AD, OneLogin, PingIdentity
+
+Monitoring
+- Real-time dashboard, sub-second metrics
+- PromQL-compatible custom metrics
+- Alerts go to email, Slack, PagerDuty, OpsGenie, or webhooks
+- Usage reports (daily/weekly/monthly), exportable as CSV or PDF
+- ML-based anomaly detection for traffic spikes
+- Error tracking with grouping and root cause suggestions
+- P50/P90/P95/P99 latency tracking per endpoint
+- Geographic distribution heatmap for API consumers
+
+Dev Experience
+- SDKs: Python, JS/TS, Go, Java, Ruby, PHP, Rust
+- API explorer with code samples
+- Local dev proxy for testing against prod-like environment
+- Git-based config management, PR-based deployments
+- CLI tool (swctl) for scripting and CI/CD
+- Terraform and Pulumi providers
+
+Known Limitations (as of v4.2)
+- WebSocket connections cap at 10,000 concurrent per account on Standard
+- Workflow builder doesn't support loops natively — use recursive webhook triggers as workaround
+- GraphQL subscriptions only work with the Pro plan and above
+- Batch API (/v4/batch) limited to 500 operations per request
+- Custom metrics retention: 30 days on Standard, 90 days on Pro, 1yr on Enterprise
+- Workflow step timeout minimum is 5 seconds, can't go lower
+- File upload in workflow steps maxes out at 100MB regardless of plan
+- The Rust SDK is still in beta, some endpoints missing (check changelog)
+
+
+PRICING
+
+Standard — $49/mo
+  100K API calls, 5 workflows, 3 team members
+
+Pro — $199/mo
+  1M API calls, 50 workflows, 25 members, priority support
+
+Enterprise — custom
+  Unlimited everything, dedicated account manager, SLA
+
+Overages:
+  Standard $0.50 per 1K extra calls, Pro $0.30 per 1K, Enterprise negotiated
+
+Add-ons:
+  Advanced Analytics +$49/mo (needed for anomaly detection + custom metrics)
+  Extended Audit Logs +$29/mo
+  Dedicated IP +$19/mo each
+  Custom Domain: free on Pro/Enterprise, $9/mo on Standard
+
+
+INTEGRATION
+
+Getting started:
+1. Sign up at https://app.smartwidget.io/signup
+2. Go to Settings > API Keys, create a key
+3. Install SDK — pip install smartwidget-sdk or npm install @smartwidget/sdk
+4. Init the client with your key and make a call
+
+Auth header format:
+  Authorization: Bearer sw_live_xxxxxxxxxxxxxxxxxxxx
+Test keys start with sw_test_, live keys with sw_live_.
+Don't put live keys in client-side code or public repos.
+
+Rate limit responses (HTTP 429):
+  X-RateLimit-Limit: 1000
+  X-RateLimit-Remaining: 0
+  X-RateLimit-Reset: 1708300800
+  Retry-After: 32
+Use exponential backoff, start at 1s, max 5 retries.
+
+Webhooks — configure at Settings > Webhooks
+Events: workflow.completed, workflow.failed, workflow.timeout,
+        api.error, api.rate_limited,
+        user.created, user.updated, user.deleted,
+        billing.invoice.created, billing.payment.failed
+Payloads signed with HMAC-SHA256 (verify with your webhook secret).
+Delivery timeout 30s, retries 3x with backoff.
+
+Migrating from v3.x to v4.2:
+  - Auth header: X-API-Key is now Authorization: Bearer
+  - Rate limit headers: X-Rate-Limit-* renamed to X-RateLimit-*
+  - Webhook payloads changed from flat to nested JSON
+  - Execution endpoint: /v3/execute -> /v4/workflows/run
+  Run: swctl migrate --from v3 --to v4 --dry-run
+
+
+TROUBLESHOOTING
+
+Common errors:
+  401 — bad or expired API key, regenerate in Settings
+  403 — wrong permissions, check your RBAC roles
+  429 — rate limited, back off and retry
+  502 — upstream timeout, bump your workflow step timeouts
+  503 — we're down, check status.smartwidget.io
+
+Connection problems:
+  - Make sure port 443 outbound is open to *.smartwidget.io
+  - Behind a proxy? Set it in SDK: SmartWidget(proxy="http://proxy:8080")
+  - WebSocket needs WSS on 443
+  - DNS issues: try 8.8.8.8 or 1.1.1.1
+
+Performance tips:
+  - Connection pooling: max_connections=25
+  - Compression: send Accept-Encoding: gzip
+  - Paginate list calls (default 50, max 200)
+  - Use ETags for caching GET responses
+  - Bulk ops: use /v4/batch instead of individual calls
+  - If latency matters, deploy to the region closest to your users
+  - For high-throughput: request a rate limit increase via support ticket
+    (takes 1-2 business days, need to justify the volume)
+
+Common integration mistakes:
+  - Using test keys (sw_test_) in production — you'll get sandbox data back
+  - Not handling pagination — default page size is 50, if you have more records
+    you'll silently miss them
+  - Hardcoding webhook URLs — use config or env vars so staging/prod don't cross
+  - Ignoring Retry-After header on 429s — just sleeping a fixed 1s won't work
+    under sustained load, read the header value
+  - Forgetting to verify webhook signatures — anyone can POST to your endpoint
+    if it's public
+
+
+SLA & SUPPORT
+
+Uptime guarantees:
+  Standard  — 99.5%
+  Pro       — 99.9%
+  Enterprise — 99.99% (financial credits if violated)
+
+Support channels:
+  Standard: email only, 48hr response, community forum
+  Pro: email + chat, 4hr response, phone during business hours
+  Enterprise: 24/7 phone + email + chat, 1hr response, dedicated Slack channel,
+              quarterly business reviews
+
+Escalation path: if your ticket isn't resolved within the SLA window,
+reply with "ESCALATE" in the subject and it goes to a senior engineer.
+Enterprise customers can also page their dedicated account manager directly.
+
+Status page: status.smartwidget.io — subscribe for email/SMS alerts on outages.
+Scheduled maintenance windows: Sundays 2-4am UTC, announced 72hrs in advance.
+Emergency maintenance can happen anytime but we post to the status page within 5min.

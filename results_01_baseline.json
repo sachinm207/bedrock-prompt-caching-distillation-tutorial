@@ -1,0 +1,52 @@
+{
+  "benchmark": "baseline_no_cache",
+  "model": "amazon.nova-pro-v1:0",
+  "turns": [
+    {
+      "turn": 1,
+      "question": "What are the main features of SmartWidget Pro?",
+      "latency_s": 2.5986785888671875,
+      "input_tokens": 2079,
+      "output_tokens": 137
+    },
+    {
+      "turn": 2,
+      "question": "How do I configure the API integration? Give me a quick start guide.",
+      "latency_s": 1.6067309379577637,
+      "input_tokens": 2235,
+      "output_tokens": 162
+    },
+    {
+      "turn": 3,
+      "question": "What's the pricing for enterprise customers?",
+      "latency_s": 1.0841708183288574,
+      "input_tokens": 2410,
+      "output_tokens": 63
+    },
+    {
+      "turn": 4,
+      "question": "My API is returning 429 errors. How do I fix this?",
+      "latency_s": 1.3469414710998535,
+      "input_tokens": 2493,
+      "output_tokens": 79
+    },
+    {
+      "turn": 5,
+      "question": "How do I migrate from v3.x to v4.2? What are the breaking changes?",
+      "latency_s": 1.2545557022094727,
+      "input_tokens": 2597,
+      "output_tokens": 121
+    }
+  ],
+  "totals": {
+    "input_tokens": 11814,
+    "output_tokens": 562,
+    "latency_s": 7.89,
+    "cost_usd": 0.01125
+  },
+  "daily_projection": {
+    "conversations": 1000,
+    "daily_cost_usd": 11.25,
+    "monthly_cost_usd": 337.49
+  }
+}
