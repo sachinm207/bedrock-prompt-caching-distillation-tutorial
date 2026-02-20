@@ -5,48 +5,48 @@
     {
       "turn": 1,
       "question": "What are the main features of SmartWidget Pro?",
-      "latency_s": 2.5986785888671875,
-      "input_tokens": 2079,
-      "output_tokens": 137
+      "latency_s": 2.982853651046753,
+      "input_tokens": 2140,
+      "output_tokens": 287
     },
     {
       "turn": 2,
       "question": "How do I configure the API integration? Give me a quick start guide.",
-      "latency_s": 1.6067309379577637,
-      "input_tokens": 2235,
-      "output_tokens": 162
+      "latency_s": 1.820504903793335,
+      "input_tokens": 2446,
+      "output_tokens": 179
     },
     {
       "turn": 3,
       "question": "What's the pricing for enterprise customers?",
-      "latency_s": 1.0841708183288574,
-      "input_tokens": 2410,
-      "output_tokens": 63
+      "latency_s": 1.229565143585205,
+      "input_tokens": 2638,
+      "output_tokens": 92
     },
     {
       "turn": 4,
       "question": "My API is returning 429 errors. How do I fix this?",
-      "latency_s": 1.3469414710998535,
-      "input_tokens": 2493,
-      "output_tokens": 79
+      "latency_s": 1.2789504528045654,
+      "input_tokens": 2750,
+      "output_tokens": 85
     },
     {
       "turn": 5,
       "question": "How do I migrate from v3.x to v4.2? What are the breaking changes?",
-      "latency_s": 1.2545557022094727,
-      "input_tokens": 2597,
-      "output_tokens": 121
+      "latency_s": 1.4692635536193848,
+      "input_tokens": 2860,
+      "output_tokens": 153
     }
   ],
   "totals": {
-    "input_tokens": 11814,
-    "output_tokens": 562,
-    "latency_s": 7.89,
-    "cost_usd": 0.01125
+    "input_tokens": 12834,
+    "output_tokens": 796,
+    "latency_s": 8.78,
+    "cost_usd": 0.012814
   },
   "daily_projection": {
     "conversations": 1000,
-    "daily_cost_usd": 11.25,
-    "monthly_cost_usd": 337.49
+    "daily_cost_usd": 12.81,
+    "monthly_cost_usd": 384.43
   }
 }
